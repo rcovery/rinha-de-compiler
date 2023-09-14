@@ -1,6 +1,11 @@
 defmodule Binary do
+  # Concatenate strings
   def add(lhs, rhs) do
-    lhs + rhs
+    if Validator.Binary.can_add(lhs, rhs) do
+      lhs + rhs
+    else
+      to_string(lhs) <> to_string(rhs)
+    end
   end
 
   @spec sub(number, number) :: number
@@ -15,7 +20,7 @@ defmodule Binary do
 
   @spec div(number, number) :: float
   def div(lhs, rhs) do
-    if Validator.Binary.canDivide(rhs) == true do
+    if Validator.Binary.can_divide(rhs) == true do
       lhs / rhs
     else
       raise("Cannot divide by 0!")

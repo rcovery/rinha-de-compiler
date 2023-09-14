@@ -6,6 +6,11 @@ defmodule BinaryTest do
     assert Binary.add(6, 6) == 12
   end
 
+  test "must concatenate when arg is not integer" do
+    assert Binary.add(6, "6") == "66"
+    assert Binary.add(true, "6") == "true6"
+  end
+
   test "subtraction of two numbers" do
     assert Binary.sub(6, 6) == 0
   end
