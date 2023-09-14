@@ -1,18 +1,14 @@
 defmodule Rinha do
-  @moduledoc """
-  Documentation for `Rinha`.
-  """
+  def load(rinha_file_name) do
+    case File.read("./sources/" <> rinha_file_name <> ".rinha.json") do
+      {:ok, data} ->
+        parsed_json = JSON.decode(data)
+        IO.puts(parsed_json)
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Rinha.hello()
-      :world
-
-  """
-  def hello do
-    :world
+      {:error, reason} ->
+        :error
+    end
   end
 end
+
+Rinha.load("app")
