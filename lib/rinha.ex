@@ -2,13 +2,13 @@ defmodule Rinha do
   def load(rinha_file_name) do
     case File.read("./sources/" <> rinha_file_name <> ".rinha.json") do
       {:ok, data} ->
-        parsed_json = JSON.decode(data)
-        IO.puts(parsed_json)
+        {:ok, json} = JSON.decode(data)
+        Interpreter.eval(json["expression"])
 
       {:error, reason} ->
-        :error
+        raise("Cannot load file!: " <> to_string(reason))
     end
   end
 end
 
-Rinha.load("app")
+Rinha.load("add")
