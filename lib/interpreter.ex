@@ -6,6 +6,9 @@ defmodule Interpreter do
       "Int" ->
         expression["value"]
 
+      "Str" ->
+        expression["value"]
+
       "Print" ->
         IO.puts(eval(expression["value"]))
 
@@ -16,6 +19,7 @@ defmodule Interpreter do
 
         case expression["op"] do
           "Add" -> Binary.add(lhs, rhs)
+          "Sub" -> Binary.sub(lhs, rhs)
           _ -> raise "Nothing to do!"
         end
 
