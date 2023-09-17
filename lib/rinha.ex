@@ -10,3 +10,5 @@ defmodule Rinha do
     end
   end
 end
+
+Rinha.load("tuple")
