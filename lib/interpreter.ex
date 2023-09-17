@@ -1,53 +1,58 @@
 defmodule Interpreter do
-  def(eval(expression)) do
-    kind = expression |> Map.get("kind")
+  def eval(expression) do
+    kind = expression |> Map.get("kind") |> String.downcase() |> String.to_existing_atom()
 
-    case kind do
-      "Int" ->
-        expression["value"]
+    apply(Interpreter, kind, [expression])
+    # IO.puts("None of them")
+  end
 
-      "Str" ->
-        expression["value"]
+  def int(expression) do
+    expression["value"]
+  end
 
-      "Bool" ->
-        expression["value"]
+  def str(expression) do
+    expression["value"]
+  end
 
-      "Tuple" ->
-        first_value = eval(expression["first"])
-        second_value = eval(expression["second"])
-        {first_value, second_value}
+  def bool(expression) do
+    expression["value"]
+  end
 
-      "First" ->
-        eval(expression["value"]) |> elem(0)
+  def tuple(expression) do
+    first_value = eval(expression["first"])
+    second_value = eval(expression["second"])
+    {first_value, second_value}
+  end
 
-      "Second" ->
-        eval(expression["value"]) |> elem(1)
+  def first(expression) do
+    eval(expression["value"]) |> elem(0)
+  end
 
-      "Print" ->
-        value_to_print = eval(expression["value"])
+  def second(expression) do
+    eval(expression["value"]) |> elem(1)
+  end
 
-        if is_tuple(value_to_print) do
-          parsed_tuple = Tuple.to_list(value_to_print) |> Enum.join(", ")
-          IO.puts("(#{parsed_tuple})")
-        else
-          IO.puts(value_to_print)
-        end
+  def print(expression) do
+    value_to_print = eval(expression["value"])
 
-      "Binary" ->
-        lhs = eval(expression["lhs"])
-        rhs = eval(expression["rhs"])
+    if is_tuple(value_to_print) do
+      parsed_tuple = Tuple.to_list(value_to_print) |> Enum.join(", ")
+      IO.puts("(#{parsed_tuple})")
+    else
+      IO.puts(value_to_print)
+    end
+  end
 
-        try do
-          def_name = ("do_" <> expression["op"]) |> String.downcase() |> String.to_existing_atom()
+  def binary(expression) do
+    lhs = eval(expression["lhs"])
+    rhs = eval(expression["rhs"])
 
-          apply(BinaryOp, def_name, [lhs, rhs])
-        rescue
-          # TODO Error handling
-          e -> e
-        end
+    try do
+      def_name = ("do_" <> expression["op"]) |> String.downcase() |> String.to_existing_atom()
 
-      _ ->
-        IO.puts("None of them")
+      apply(BinaryOp, def_name, [lhs, rhs])
+    rescue
+      e -> e
     end
   end
 end

@@ -1,5 +1,8 @@
 defmodule Rinha do
-  def load(rinha_file_name) do
+  def load() do
+    [arg] = System.argv()
+    rinha_file_name = arg
+
     case File.read("./sources/" <> rinha_file_name <> ".rinha.json") do
       {:ok, data} ->
         {:ok, json} = JSON.decode(data)
@@ -11,4 +14,4 @@ defmodule Rinha do
   end
 end
 
-Rinha.load("tuple")
+Rinha.load()
