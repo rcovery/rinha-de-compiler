@@ -37,10 +37,12 @@ defmodule Interpreter do
 
     if is_tuple(value_to_print) do
       parsed_tuple = Tuple.to_list(value_to_print) |> Enum.join(", ")
-      IO.puts("(#{parsed_tuple})")
+      IO.puts("(#{parsed_tuple})" <> "\n")
     else
-      IO.puts(value_to_print)
+      IO.puts(value_to_print <> "\n")
     end
+
+    value_to_print
   end
 
   def binary(expression) do
