@@ -1,0 +1,7 @@
+let number = 5;
+
+if (number > 10) {
+    print(number > 10)
+} else {
+    print("Nothing else!")
+}
