@@ -1,0 +1,9 @@
+let number = 5;
+
+let a = fn (parameter1) => {
+    let number = 10;
+
+    print(number * parameter1)
+};
+
+print(a(2))
