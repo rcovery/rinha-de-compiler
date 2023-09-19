@@ -59,9 +59,15 @@ defmodule Interpreter do
     Map.get(scope, expression["text"])
   end
 
-  def do_func(expression, scope) do
+  def do_func(expression, _) do
+    %{
+      calle: fn modified_scope -> eval(expression, modified_scope) end,
+      parameters: expression["parameters"]
+    }
+  end
+
+  def do_call(expression, scope) do
     # TODO
-    fn -> eval(expression, scope) end
   end
 
   def do_print(expression, scope) do
