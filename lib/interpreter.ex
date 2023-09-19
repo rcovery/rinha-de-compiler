@@ -61,13 +61,33 @@ defmodule Interpreter do
 
   def do_func(expression, _) do
     %{
-      calle: fn modified_scope -> eval(expression, modified_scope) end,
+      function: fn modified_scope -> eval(expression, modified_scope) end,
       parameters: expression["parameters"]
     }
   end
 
   def do_call(expression, scope) do
+    function = eval(expression["callee"], scope)
+
+    arguments = expression["arguments"]
+    parameters = function["parameters"]
+
     # TODO
+    # if () do
+    #   raise "Tá errado aí parcero"
+    # end
+
+    IO.puts(arguments)
+    IO.puts(parameters)
+
+    modified_scope = scope
+    idx = 0
+
+    Enum.each(arguments, fn arg ->
+      Map.put(modified_scope, parameters[idx], arg)
+    end)
+
+    apply(function, expression["arguments"])
   end
 
   def do_print(expression, scope) do
