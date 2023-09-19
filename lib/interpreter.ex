@@ -59,7 +59,7 @@ defmodule Interpreter do
     Map.get(scope, expression["text"])
   end
 
-  def do_func(expression, _) do
+  def do_function(expression, _) do
     %{
       function: fn modified_scope -> eval(expression, modified_scope) end,
       parameters: expression["parameters"]
@@ -67,27 +67,33 @@ defmodule Interpreter do
   end
 
   def do_call(expression, scope) do
-    function = eval(expression["callee"], scope)
+    callee = eval(expression["callee"], scope)
 
     arguments = expression["arguments"]
-    parameters = function["parameters"]
+    parameters = callee |> Map.get(:parameters)
 
     # TODO
     # if () do
     #   raise "Tá errado aí parcero"
     # end
 
-    IO.puts(arguments)
-    IO.puts(parameters)
-
     modified_scope = scope
-    idx = 0
 
-    Enum.each(arguments, fn arg ->
-      Map.put(modified_scope, parameters[idx], arg)
-    end)
+    # IO.inspect(arguments)
+    # IO.inspect(parameters)
 
-    apply(function, expression["arguments"])
+    # TODO arrumar um jeito de modificar o escopo
+    {:ok, modified_scope} =
+      arguments
+      |> Enum.with_index()
+      |> Enum.each(fn {arg, idx} ->
+        param = parameters |> Enum.at(idx) |> Map.get("text") |> String.to_atom()
+
+        modified_scope |> Map.put(param, eval(arg, scope))
+      end)
+
+    IO.inspect(modified_scope)
+    callee |> Map.get(:function) |> apply([modified_scope])
   end
 
   def do_print(expression, scope) do
