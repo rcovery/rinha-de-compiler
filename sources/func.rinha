@@ -3,7 +3,7 @@ let number = 5;
 let a = fn (parameter1) => {
     let number = 10;
 
-    print(number * parameter1)
+    number * parameter1
 };
 
-print(a(2))
+print("Retorno da função: " + a(2) + "" + number)

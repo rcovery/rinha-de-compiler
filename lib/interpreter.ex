@@ -61,7 +61,7 @@ defmodule Interpreter do
 
   def do_function(expression, _) do
     %{
-      function: fn modified_scope -> eval(expression, modified_scope) end,
+      function: fn modified_scope -> eval(expression["value"], modified_scope) end,
       parameters: expression["parameters"]
     }
   end
@@ -77,23 +77,19 @@ defmodule Interpreter do
     #   raise "Tá errado aí parcero"
     # end
 
-    modified_scope = scope
-
-    # IO.inspect(arguments)
-    # IO.inspect(parameters)
-
-    # TODO arrumar um jeito de modificar o escopo
-    {:ok, modified_scope} =
+    modified_scope =
       arguments
       |> Enum.with_index()
-      |> Enum.each(fn {arg, idx} ->
-        param = parameters |> Enum.at(idx) |> Map.get("text") |> String.to_atom()
+      |> Enum.reduce(%{}, fn {arg, idx}, accumulator ->
+        param = parameters |> Enum.at(idx) |> Map.get("text")
 
-        modified_scope |> Map.put(param, eval(arg, scope))
+        accumulator |> Map.put(param, eval(arg, scope))
       end)
 
-    IO.inspect(modified_scope)
-    callee |> Map.get(:function) |> apply([modified_scope])
+    merged_scopes = scope |> Map.merge(modified_scope)
+    callee_function = callee[:function]
+
+    callee_function.(merged_scopes)
   end
 
   def do_print(expression, scope) do
