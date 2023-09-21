@@ -68,10 +68,10 @@ defmodule Interpreter do
     parameters = callee["parameters"]
     arguments = expression["arguments"]
 
-    # TODO
-    # if () do
-    #   raise "Tá errado aí parcero"
-    # end
+    if length(parameters) != length(arguments) do
+      Error.handle(expression["location"], "A quantidade de argumentos é inválida!")
+      raise("")
+    end
 
     modified_scope =
       arguments
@@ -116,12 +116,9 @@ defmodule Interpreter do
 
       apply(BinaryOp, def_name, [lhs, rhs])
     rescue
-      e ->
-        IO.puts(
-          "There is an error in #{expression["location"]["start"]}:#{expression["location"]["end"]}"
-        )
-
-        e
+      _ ->
+        Error.handle(expression["location"], "Operação não tratada!")
+        raise("")
     end
   end
 end
