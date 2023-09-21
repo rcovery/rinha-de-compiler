@@ -60,17 +60,13 @@ defmodule Interpreter do
   end
 
   def do_function(expression, _) do
-    %{
-      function: fn modified_scope -> eval(expression["value"], modified_scope) end,
-      parameters: expression["parameters"]
-    }
+    expression
   end
 
   def do_call(expression, scope) do
     callee = eval(expression["callee"], scope)
-
+    parameters = callee["parameters"]
     arguments = expression["arguments"]
-    parameters = callee |> Map.get(:parameters)
 
     # TODO
     # if () do
@@ -87,9 +83,9 @@ defmodule Interpreter do
       end)
 
     merged_scopes = scope |> Map.merge(modified_scope)
-    callee_function = callee[:function]
+    callee_function = eval(callee["value"], merged_scopes)
 
-    callee_function.(merged_scopes)
+    callee_function
   end
 
   def do_print(expression, scope) do
