@@ -91,14 +91,17 @@ defmodule Interpreter do
   def do_print(expression, scope) do
     value_to_print = eval(expression["value"], scope)
 
-    if is_tuple(value_to_print) do
-      parsed_tuple = Tuple.to_list(value_to_print) |> Enum.join(", ")
-      IO.puts("(#{parsed_tuple})")
-    else
-      IO.puts(value_to_print)
-    end
+    cond do
+      is_tuple(value_to_print) ->
+        parsed_tuple = Tuple.to_list(value_to_print) |> Enum.join(", ")
+        IO.puts("(#{parsed_tuple})")
 
-    value_to_print
+      is_map(value_to_print) && Map.get(value_to_print, "kind") == "Function" ->
+        IO.puts("<#closure>")
+
+      true ->
+        IO.puts(value_to_print)
+    end
   end
 
   def do_binary(expression, scope) do

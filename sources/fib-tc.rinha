@@ -1,0 +1,9 @@
+let fib = fn (n, fst, nxt) => {
+  if (n == 0) {
+    fst
+  } else {
+    fib(n - 1, nxt, fst + nxt)
+  }
+};
+
+print("fib: " + fib(99999, 0, 1))
