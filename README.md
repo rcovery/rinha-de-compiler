@@ -1,21 +1,27 @@
 # Rinha
 
-**TODO: Add description**
+## HOW TO RUN
 
-## Installation
+**Clone**
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `rinha` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:rinha, "~> 0.1.0"}
-  ]
-end
+```
+git clone git@github.com:rcovery/rinha-de-compiler.git
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/rinha>.
+### With Docker
 
+```
+docker build -t rcovery_rinha .
+docker run rcovery_rinha
+```
+
+### Without Docker
+
+```
+sudo pacman -Sy elixir
+mix local.hex --force
+mix deps.get
+mix run lib/rinha <rinhafilename> # Sem as flechas
+```
+
+<img src="https://raw.githubusercontent.com/rcovery/rcovery/main/assets/badges/digitalhardcore.gif">
