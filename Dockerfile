@@ -5,7 +5,6 @@ RUN apt update
 WORKDIR /rinha
 
 COPY . /rinha/
-COPY ./var/rinha /var/rinha
 
 RUN mix deps.get
 RUN mix run
