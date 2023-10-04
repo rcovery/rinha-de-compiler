@@ -1,5 +1,7 @@
 # Rinha
 
+Interpretador básico, sem otimizações ^^
+
 ## HOW TO RUN
 
 **Clone**
